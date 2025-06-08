@@ -4,12 +4,7 @@
       :style="{ position: 'fixed', zIndex: 1, width: '100%', background: '#1b7b57' }"
     >
       <div class="logo" />
-      <a-menu
-        v-model:selectedKeys="selectedKeys"
-        theme="dark"
-        mode="horizontal"
-        :style="{ lineHeight: '64px', background: 'transparent' }"
-      >
+      <a-menu v-model:selectedKeys="selectedKeys" mode="horizontal" class="custom-menu">
         <a-menu-item key="1"><router-link to="/">Đặt lịch khám</router-link></a-menu-item>
         <a-menu-item key="2"><router-link to="/search">Tra cứu lịch khám</router-link></a-menu-item>
         <a-menu-item key="3">Báo cáo</a-menu-item>
@@ -32,18 +27,29 @@ import { RouterView, RouterLink } from 'vue-router'
 const selectedKeys = ref<string[]>(['1'])
 </script>
 <style scoped>
-#components-layout-demo-fixed .logo {
-  width: 120px;
-  height: 31px;
-  background: #1b7b57;
-  margin: 16px 24px 16px 0;
-  float: left;
-}
-.site-layout .site-layout-background {
-  background: #fff;
+.custom-menu {
+  background: transparent; /* Ensure menu blends with header */
+  line-height: 64px; /* Match header height */
 }
 
-[data-theme='dark'] .site-layout .site-layout-background {
-  background: #1b7b57;
+/* Style regular menu items */
+.custom-menu :deep(.ant-menu-item) {
+  color: #ffffff !important; /* White text */
+}
+
+/* Style selected menu item */
+.custom-menu :deep(.ant-menu-item-selected) {
+  color: #ffd700 !important; /* Gold text */
+  background: rgba(255, 255, 255, 0.1) !important; /* Subtle background highlight */
+}
+
+/* Style icons to match text */
+.custom-menu :deep(.ant-menu-item .anticon) {
+  color: inherit !important; /* Icons follow text color */
+}
+
+/* Hover effect */
+.custom-menu :deep(.ant-menu-item:hover) {
+  color: #ffd700 !important; /* Gold on hover */
 }
 </style>
