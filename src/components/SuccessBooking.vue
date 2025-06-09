@@ -10,12 +10,12 @@
 </template>
 <script setup lang="ts">
 import { useSupabaseClient } from '@/composables/supabase'
-import type { AppointmentDetail } from '@/types/models'
+import type { Appointment } from '@/types/models'
 import { onMounted, ref, type Ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const appointment: Ref<AppointmentDetail | undefined> = ref()
+const appointment: Ref<Appointment | undefined> = ref()
 
 const getAppointment = async (id: string) => {
   console.log('getAppoitment')
@@ -24,7 +24,7 @@ const getAppointment = async (id: string) => {
       .from('appointments')
       .select(
         `
-        id,
+        id, name, address, phone_number,
         date,
         time,
         doctor_id,
@@ -39,6 +39,9 @@ const getAppointment = async (id: string) => {
 
     appointment.value = {
       id: data.id,
+      name: data.name,
+      address: data.address,
+      phone_number: data.phone_number,
       date: data.date,
       time: data.time,
       selectted_doctor_id: data.doctor_id,

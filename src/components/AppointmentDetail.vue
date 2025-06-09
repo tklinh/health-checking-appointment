@@ -1,12 +1,22 @@
 <template>
-  <a-result
-    status="success"
-    title="Successfully Purchased Cloud Server ECS!"
-    sub-title="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
-  >
-    <template #extra>
-      <a-button key="console" type="primary">Go Console</a-button>
-      <a-button key="buy">Buy Again</a-button>
-    </template>
-  </a-result>
+  <br />
+  <a-list size="small">
+    <a-list-item><strong>Họ tên:</strong> {{ appointment.name }}</a-list-item>
+    <a-list-item><strong>Địa chỉ:</strong> {{ appointment.address }}</a-list-item>
+    <a-list-item><strong>Số điện thoại:</strong> {{ appointment.phone_number }}</a-list-item>
+    <a-list-item>
+      <strong>Ngày khám:</strong> {{ appointment.time }} {{ appointment.date }}
+    </a-list-item>
+    <a-list-item><strong>Số thứ tự:</strong> {{ appointment.order_number }}</a-list-item>
+    <a-list-item><strong>Phòng:</strong> {{ appointment.room_number }}</a-list-item>
+    <a-list-item><strong>Bác sĩ:</strong> {{ appointment.selected_doctor }}</a-list-item>
+  </a-list>
 </template>
+<script setup lang="ts">
+import { defineProps } from 'vue'
+import type { Appointment } from '@/types/models'
+
+defineProps<{
+  appointment: Appointment
+}>()
+</script>

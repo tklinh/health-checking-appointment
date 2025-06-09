@@ -7,8 +7,11 @@ export interface Doctor {
   image_src: string
 }
 
-export interface AppointmentDetail {
+export interface Appointment {
   id: string
+  name: string
+  address: string
+  phone_number: string
   order_number: string
   selectted_doctor_id: string
   selected_doctor: string

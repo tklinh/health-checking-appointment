@@ -48,7 +48,6 @@ import dayjs, { Dayjs } from 'dayjs'
 import { SearchOutlined } from '@ant-design/icons-vue'
 import SelectDoctor from './SelectDoctor.vue'
 import type { Doctor } from '@/types/models'
-import { time } from 'console'
 import router from '@/router'
 
 interface FormState {

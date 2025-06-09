@@ -1,37 +1,83 @@
 <template>
-  <a-form
-    layout="inline"
-    :model="formState"
-    @finish="handleFinish"
-    @finishFailed="handleFinishFailed"
-  >
-    <a-form-item> </a-form-item>
-    <a-form-item>
-      <a-input v-model:value="formState.user" placeholder="Nhập số điện thoại" />
-    </a-form-item>
-    <a-form-item>
-      <a-button type="primary" html-type="submit"> Tìm kiếm </a-button>
-    </a-form-item>
-  </a-form>
+  <a-input-search
+    v-model:value="phone_number"
+    placeholder="input search text"
+    style="width: 300px"
+    enter-button="Search"
+    @search="onSearch"
+  />
+  <appointment-detail v-for="app in appointments" :key="app.id" :appointment="app" />
 </template>
 <script lang="ts" setup>
-import { reactive } from 'vue'
-import { UserOutlined } from '@ant-design/icons-vue'
-import type { UnwrapRef } from 'vue'
-import type { FormProps } from 'ant-design-vue'
+import { useSupabaseClient } from '@/composables/supabase'
+import type { Appointment } from '@/types/models'
+import { ref } from 'vue'
+import type { Ref } from 'vue'
+import AppointmentDetail from './AppointmentDetail.vue'
 
-interface FormState {
-  user: string
-  password: string
+const phone_number: Ref<string> = ref('')
+const appointments: Ref<Appointment[]> = ref([])
+
+const onSearch = async () => {
+  appointments.value = []
+  try {
+    const { data, error } = await useSupabaseClient
+      .from('appointments')
+      .select(
+        `
+        id, name, address, phone_number,
+        date,
+        time,
+        doctor_id,
+        order_number,
+        room_number
+      `,
+      )
+      .eq('phone_number', phone_number.value)
+
+    if (error) throw error
+    console.log(data)
+    if (data!.length > 0) {
+      data.forEach(async (app) => {
+        appointments.value.push({
+          id: app.id,
+          name: app.name,
+          address: app.address,
+          phone_number: app.phone_number,
+          date: app.date,
+          time: app.time,
+          selectted_doctor_id: app.doctor_id,
+          selected_doctor: await getDoctorName(app.doctor_id),
+          order_number: app.order_number,
+          room_number: app.room_number,
+        })
+      })
+    }
+  } catch (error: any) {
+    console.error(error.message)
+  }
 }
-const formState: UnwrapRef<FormState> = reactive({
-  user: '',
-  password: '',
-})
-const handleFinish: FormProps['onFinish'] = (values) => {
-  console.log(values, formState)
-}
-const handleFinishFailed: FormProps['onFinishFailed'] = (errors) => {
-  console.log(errors)
+
+const getDoctorName = async (id: string): Promise<string> => {
+  try {
+    const { data, error } = await useSupabaseClient
+      .from('doctors')
+      .select(
+        `
+        name
+      `,
+      )
+      .eq('id', id)
+      .single()
+
+    if (error) throw error
+
+    if (data) {
+      return data.name
+    }
+  } catch (error: any) {
+    console.error('Fetch appointment error:', error)
+  }
+  return ''
 }
 </script>
