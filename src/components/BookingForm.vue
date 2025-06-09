@@ -25,7 +25,7 @@
     <a-form-item label="Ngày khám">
       <a-date-picker v-model:value="formState.appointment_date" format="DD-MM-YYYY" />
     </a-form-item>
-    <a-form-item label="Ngày khám">
+    <a-form-item label="Giờ khám">
       <select-time @select-appointment-time="selectAppointmentTimeHandler" />
     </a-form-item>
     <a-form-item label="Lý do khám">
