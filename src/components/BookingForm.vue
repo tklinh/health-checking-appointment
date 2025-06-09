@@ -25,6 +25,9 @@
     <a-form-item label="Ngày khám">
       <a-date-picker v-model:value="formState.appointment_date" format="DD-MM-YYYY" />
     </a-form-item>
+    <a-form-item label="Ngày khám">
+      <select-time @select-appointment-time="selectAppointmentTimeHandler" />
+    </a-form-item>
     <a-form-item label="Lý do khám">
       <a-textarea v-model:value="formState.desc" />
     </a-form-item>
@@ -46,7 +49,10 @@ import type { Ref, UnwrapRef } from 'vue'
 import dayjs, { Dayjs } from 'dayjs'
 
 import { SearchOutlined } from '@ant-design/icons-vue'
+
 import SelectDoctor from './SelectDoctor.vue'
+import SelectTime from './SelectTime.vue'
+
 import type { Doctor } from '@/types/models'
 import router from '@/router'
 
@@ -72,6 +78,7 @@ const formState: UnwrapRef<FormState> = reactive({
 const loading = ref<boolean>(false)
 const showChooseDoctorModal = ref<boolean>(false)
 const selectedDoctor: Ref<Doctor | undefined> = ref()
+let selectedTimeSlot: Dayjs
 
 const showModal = () => {
   showChooseDoctorModal.value = true
@@ -81,6 +88,10 @@ const selectDoctorHandler = async (payload: { id: string }) => {
   showChooseDoctorModal.value = false
   console.log('received: ' + payload.id)
   selectedDoctor.value = await getDoctor(payload.id)
+}
+
+const selectAppointmentTimeHandler = (payload: { id: string; time: Dayjs }) => {
+  selectedTimeSlot = payload.time
 }
 
 const getDoctor = async (id: string): Promise<Doctor | undefined> => {
@@ -112,7 +123,7 @@ const onSubmit = async () => {
         gender: formState.gender,
         doctor_id: selectedDoctor.value?.id,
         date: formState.appointment_date,
-        time: '09:00:00',
+        time: selectedTimeSlot.format('HH:mm:ss'),
         order_number: 1,
         description: formState.desc,
         room_number: 'A202',

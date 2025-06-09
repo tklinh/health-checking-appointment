@@ -13,9 +13,10 @@ export interface Appointment {
   address: string
   phone_number: string
   order_number: string
-  selectted_doctor_id: string
-  selected_doctor: string
+  selectted_doctor_id?: string
+  selected_doctor?: string
   room_number: string
   date: string
-  time: string
+  time?: string
+  description?: string
 }

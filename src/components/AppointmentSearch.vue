@@ -30,7 +30,8 @@ const onSearch = async () => {
         time,
         doctor_id,
         order_number,
-        room_number
+        room_number,
+        description
       `,
       )
       .eq('phone_number', phone_number.value)
@@ -50,6 +51,7 @@ const onSearch = async () => {
           selected_doctor: await getDoctorName(app.doctor_id),
           order_number: app.order_number,
           room_number: app.room_number,
+          description: app.description,
         })
       })
     }
